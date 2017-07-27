@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong) NSMutableDictionary *dic;
 
+@property (nonatomic, strong) UIScrollView *scrollContentView;
+
 @end
 
 @implementation LSRootVC
@@ -154,7 +156,7 @@
             gridViewController = [[LSSubVC1 alloc] init];
         }
         
-        gridViewController.delegate = self;
+//        gridViewController.delegate = self;
         
         
         return gridViewController;
@@ -167,7 +169,7 @@
         {
             gridViewController = [[LSSubVC2 alloc] init];
         }
-        gridViewController.delegate = self;
+//        gridViewController.delegate = self;
         
         
         return gridViewController;
@@ -184,7 +186,7 @@
             
         }
         
-        recomViewController.delegate = self;
+//        recomViewController.delegate = self;
         
         return recomViewController;
     }
@@ -192,6 +194,7 @@
 
 - (void)scrollViewDidScroll:(CGFloat)yOffset scrollView:(UIScrollView*)view
 {
+    /*
     NSString *strAddr = [NSString stringWithFormat:@"%p", view];
     NSNumber *numY = [self.dic objectForKey:strAddr];
     
@@ -264,8 +267,8 @@
         
 #endif
     }
-    
-    NSLog(@"lastY:%f",lastY);
+    */
+//    NSLog(@"lastY:%f",lastY);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -284,8 +287,120 @@
     }
     
     
-    NSLog(@"nav:%f",yOffset);
+//    NSLog(@"nav:%f",yOffset);
 }
 
 
+- (void)magicView:(VTMagicView *)magicView viewDidAppear:(__kindof UIViewController *)viewController atPage:(NSUInteger)pageIndex
+{
+    NSLog(@"item =====  %ld",pageIndex);
+    
+    if (self.scrollContentView)
+    {
+        [self.scrollContentView removeObserver:self forKeyPath:@"contentOffset"];
+        self.scrollContentView = nil;
+    }
+    
+    if([viewController respondsToSelector:@selector(currentScrollView)])
+    {
+        self.scrollContentView = [viewController performSelector:@selector(currentScrollView)];
+        [self.scrollContentView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:nil];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    
+    if ([keyPath isEqualToString:@"contentOffset"])
+    {
+        if (object == self.scrollContentView)
+        {
+            CGFloat yOffset  = [change[NSKeyValueChangeNewKey] CGPointValue].y;
+            
+            
+            NSString *strAddr = [NSString stringWithFormat:@"%p", object];
+            NSNumber *numY = [self.dic objectForKey:strAddr];
+            
+            if (numY == nil)
+            {
+                numY = [NSNumber numberWithFloat:0];
+                
+            }
+            
+            CGFloat lastY = [numY floatValue];
+            
+            
+            //标签已经滑动到顶端了
+            if (self.backgroundSV.contentOffset.y == HeaderViewHeight - 64)
+            {
+                if (yOffset > 0)
+                {
+                    self.lockToTop = YES;
+                    
+//                    NSLog(@"LOCK YES");
+                }
+                else
+                {
+                    self.lockToTop = NO;
+                    
+//                    NSLog(@"LOCK NO");
+                }
+                
+                numY = [NSNumber numberWithFloat:yOffset];
+                [self.dic setObject:numY forKey:strAddr];
+            }
+            //标签在底端
+            else if(self.backgroundSV.contentOffset.y == 0)
+            {
+                
+                numY = [NSNumber numberWithFloat:yOffset];
+                [self.dic setObject:numY forKey:strAddr];
+            }
+            else
+            {
+                
+#ifdef ScrollTogether
+                
+                
+                static NSInteger lastyCount = 0;
+                static CGFloat lastYCopy = 10000;
+                
+                if (lastYCopy == lastY)
+                {
+                    lastyCount++;
+                }
+                else
+                {
+                    lastyCount = 0;
+                    lastYCopy = lastY;
+                }
+                
+                if (lastyCount >= 2)
+                {
+                    lastyCount = 0;
+                    lastYCopy = 10000;
+                }
+                else
+                {
+                    self.scrollContentView.contentOffset = CGPointMake(0, lastY);
+                }
+                
+                //    view.contentOffset = CGPointMake(0, lastY);
+                
+                
+#endif
+            }
+
+            
+        }
+    }
+}
+
+- (void)dealloc
+{
+    if (self.scrollContentView)
+    {
+        [self.scrollContentView removeObserver:self forKeyPath:@"contentOffset"];
+        self.scrollContentView = nil;
+    }
+}
 @end

@@ -10,7 +10,7 @@
 //#import "SDAutoLayout/UIView+SDAutoLayout.h"
 
 @interface LSSubVC1 ()  <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
-
+@property (nonatomic, strong) UITableView *t;
 @end
 
 @implementation LSSubVC1
@@ -25,6 +25,7 @@
     v.delegate = self;
     v.dataSource = self;
     v.rowHeight = 20;
+    self.t = v;
     [self.view addSubview:v];
 
 //    v.sd_layout
@@ -64,6 +65,9 @@
         [self.delegate scrollViewDidScroll:scrollView.contentOffset.y scrollView:scrollView];
     }
 }
-
+- (UIScrollView*)currentScrollView
+{
+    return  self.t;
+}
 
 @end

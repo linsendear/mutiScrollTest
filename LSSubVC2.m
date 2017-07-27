@@ -12,6 +12,7 @@
 
 @interface LSSubVC2 () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 
+@property (nonatomic, strong) UITableView *t;
 @end
 
 @implementation LSSubVC2
@@ -26,6 +27,7 @@
     v.dataSource = self;
     v.rowHeight = 40;
     
+    self.t = v;
     
     [self.view addSubview:v];
     
@@ -67,5 +69,8 @@
     }
 }
 
-
+- (UIScrollView*)currentScrollView
+{
+    return  self.t;
+}
 @end

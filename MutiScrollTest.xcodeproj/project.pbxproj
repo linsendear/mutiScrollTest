@@ -206,6 +206,7 @@
 				TargetAttributes = {
 					989467021F18558B00BFA50F = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = 6FM8RQQK99;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -382,9 +383,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6FM8RQQK99;
 				INFOPLIST_FILE = MutiScrollTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.chinaedu.MutiScrollTest;
+				PRODUCT_BUNDLE_IDENTIFIER = net.chinaedu.MutiScrollTest1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -393,9 +396,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6FM8RQQK99;
 				INFOPLIST_FILE = MutiScrollTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = net.chinaedu.MutiScrollTest;
+				PRODUCT_BUNDLE_IDENTIFIER = net.chinaedu.MutiScrollTest1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -419,6 +424,7 @@
 				9894671C1F18558B00BFA50F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
